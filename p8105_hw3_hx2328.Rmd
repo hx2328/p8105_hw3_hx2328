@@ -228,3 +228,30 @@ two_panel_plot = two_panel_plot_2006 + two_panel_plot_2010
 two_panel_plot
 ```
 
+
+# Problem 3
+
+## Load, tidy, and otherwise wrangle the data. Your final dataset should include all originally observed variables and values; have useful variable names; include a weekday vs weekend variable; and encode data with reasonable variable classes. Describe the resulting dataset (e.g. what variables exist, how many observations, etc).
+
+```{r}
+accel = read_csv("./problem3/accel_data.csv")
+
+accel = accel %>% 
+  janitor::clean_names() %>% 
+  mutate(day_type = recode(day, 
+                           "Monday" = "weekday",
+                           "Tuesday" = "weekday",
+                           "Wednesday" = "weekday",
+                           "Thursday" = "weekday",
+                           "Friday" = "weekday",
+                           "Saturday" = "weekend",
+                           "Sunday" = "weekend"),
+         day = forcats::fct_relevel(day, c("Monday", "Tuesday", "Wednesday",
+                                           "Thursday", "Friday", "Saturday",
+                                           "Sunday"))) %>% 
+  relocate(week, day, day_type, day_id)
+  
+```
+
+The modified data has totally `r nrow(accel)` observations of `r ncol(accel)` variables. The "week" indicates the number of weeks; the "day" represents the day of each week; the "day_type" represents whether the day is weekday or weekend; the "day_id" represents different number of days; and the activity_* are the activity counts for each minute of a 24-hour day starting at midnight, and there are 1440 of them since there are 1440 minutes each day.
+
