@@ -180,16 +180,11 @@ brfss_excellent = brfss_smart2010 %>%
 Then create the plot.
 
 ```{r}
-#this is for displaying the plot, so omit the legend for states.
-brfss_excellent %>% 
+brfss_excellent_plot = brfss_excellent %>% 
   ggplot(aes(x = year, y = mean_data_value, color = state)) + 
   geom_line(aes(group = state)) + 
   theme(legend.position = "none")
-
-#This is for saving the plot, so the legend is included.
-brfss_excellent_plot = brfss_excellent %>% 
-  ggplot(aes(x = year, y = mean_data_value, color = state)) + 
-  geom_line(aes(group = state))
+brfss_excellent_plot
 ```
 
 ## Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
@@ -260,12 +255,40 @@ The modified data has totally `r nrow(accel)` observations of `r ncol(accel)` va
 ## Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 
 ```{r}
-accel %>% 
+accel_total = accel %>% 
   mutate(total_activity = rowSums(accel[ ,c(-1,-2,-3,-4,-5)])) %>% 
-  select(week, day, total_activity) %>% 
-  knitr::kable()
+  select(week, day, total_activity)
+
+accel_total_table = knitr::kable(accel_total)
+accel_total_table
 ```
 
 According to the table, there is an increasing trend of total activity within several days, and then dropped, and increase again periodically.
 
+## Accelerometer data allows the inspection activity over the course of the day. Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
+
+```{r}
+accel_total_plot = accel_total %>% 
+  mutate(day_number = c(1:35)) %>% 
+  ggplot(aes(x = day_number, y = total_activity, color = day)) + 
+  geom_point() + 
+  geom_line()
+accel_total_plot
+```
+
+
+According to the graph, the total activity has a periodic trend, and for most of the days for each week, the mutation of total activity is relatively small. 
+
+```{r}
+# save the plots
+
+ggsave("aisle_count_plot.pdf", aisle_count_plot, path = "./problem1")
+
+ggsave("brfss_excellent_plot.pdf", brfss_excellent_plot, path = "./problem2")
+
+ggsave("two_panel_plot.pdf", two_panel_plot, path = "./problem2")
+
+ggsave("accel_total_plot.pdf", accel_total_plot, path = "./problem3")
+
+```
 
