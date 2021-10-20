@@ -132,3 +132,36 @@ brfss_smart2010 =
   mutate(response = forcats::fct_relevel(response, c("Poor", "Fair", "Good", "Very good", "Excellent")))
 ```
 
+## In 2002, which states were observed at 7 or more locations? What about in 2010?
+
+For 2002:
+
+```{r}
+brfss_smart2010 %>% 
+  filter(year == 2002) %>% 
+  group_by(locationabbr, locationdesc) %>% 
+  summarise(n_obs = n()) %>% 
+  group_by(locationabbr) %>% 
+  summarise(num_locations = n()) %>% 
+  filter(num_locations >= 7) %>% 
+  knitr::kable()
+```
+
+As a result, the states that were observed at 7 or more locations in 2002 are: CT, FL, MA, NC, NJ, PA.
+
+For 2010:
+
+```{r}
+brfss_smart2010 %>% 
+  filter(year == 2010) %>% 
+  group_by(locationabbr, locationdesc) %>% 
+  summarise(n_obs = n()) %>% 
+  group_by(locationabbr) %>% 
+  summarise(num_locations = n()) %>% 
+  filter(num_locations >= 7) %>% 
+  knitr::kable()
+```
+
+As a result, the states that were observed at 7 or more locations in 2010 are: CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA.
+
+
