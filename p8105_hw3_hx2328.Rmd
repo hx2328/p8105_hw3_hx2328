@@ -129,7 +129,9 @@ brfss_smart2010 =
   janitor::clean_names() %>% 
   filter(topic == "Overall Health",
          response %in% c("Excellent", "Very good", "Good", "Fair", "Poor")) %>% 
-  mutate(response = forcats::fct_relevel(response, c("Poor", "Fair", "Good", "Very good", "Excellent")))
+  mutate(response = forcats::fct_relevel(response, c("Poor", "Fair", "Good", "Very good", "Excellent"))) %>% 
+  rename(state = locationabbr,
+         state_location = locationdesc)
 ```
 
 ## In 2002, which states were observed at 7 or more locations? What about in 2010?
@@ -139,9 +141,9 @@ For 2002:
 ```{r}
 brfss_smart2010 %>% 
   filter(year == 2002) %>% 
-  group_by(locationabbr, locationdesc) %>% 
+  group_by(state, state_location) %>% 
   summarise(n_obs = n()) %>% 
-  group_by(locationabbr) %>% 
+  group_by(state) %>% 
   summarise(num_locations = n()) %>% 
   filter(num_locations >= 7) %>% 
   knitr::kable()
@@ -154,14 +156,16 @@ For 2010:
 ```{r}
 brfss_smart2010 %>% 
   filter(year == 2010) %>% 
-  group_by(locationabbr, locationdesc) %>% 
+  group_by(state, state_location) %>% 
   summarise(n_obs = n()) %>% 
-  group_by(locationabbr) %>% 
+  group_by(state) %>% 
   summarise(num_locations = n()) %>% 
   filter(num_locations >= 7) %>% 
   knitr::kable()
 ```
 
 As a result, the states that were observed at 7 or more locations in 2010 are: CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA.
+
+## Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. Make a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years – the geom_line geometry and group aesthetic will help).
 
 
