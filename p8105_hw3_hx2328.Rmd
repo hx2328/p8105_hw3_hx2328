@@ -26,3 +26,30 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+# Problem 1
+
+```{r}
+library(p8105.datasets)
+data("instacart")
+```
+
+`This dataset collects `r nrow(instacart)` observations, each row is a single product that customer buy using instacart. There are `r ncol(instacart)` variables. The key variable includes "add_to_cart_order" representing the order that customer adds the product to the cart; "reordered" representing if the customer has ordered it before; "order_dow" represenging the day of the week that costomer orders; and "aisle" representing the name of the aisle.
+
+## How many aisles are there, and which aisles are the most items ordered from?
+
+```{r}
+aisle_count = 
+  instacart %>% 
+  group_by(aisle) %>% 
+  summarise(n_obs = n())
+head(aisle_count)
+```
+
+Here, we got the counts of each aisle, there are totally `r nrow(aisle_count)` different kinds of aisles. To get the most popular one, we could do following:
+
+```{r}
+aisle_count %>% 
+  filter(n_obs == max(n_obs))
+```
+
+Therefore, we got that the most popular one is "fresh vegetables", and it has been ordered 150609 times.
