@@ -98,3 +98,19 @@ selected_aisle_table =
 selected_aisle_table
 ```
 
+## Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format this table for human readers (i.e. produce a 2 x 7 table).
+
+```{r}
+instacart %>% 
+  select(product_name, order_dow, order_hour_of_day) %>% 
+  filter(product_name %in% c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
+  group_by(product_name, order_dow) %>% 
+  mutate(mean_order_hour_of_day = mean(order_hour_of_day)) %>% 
+  select(-order_hour_of_day) %>% 
+  group_by(order_dow) %>% 
+  summarise(mean = mean_order_hour_of_day)
+  pivot_wider(names_from = product_name,
+              values_from = mean_order_hour_of_day)
+  
+```
+
