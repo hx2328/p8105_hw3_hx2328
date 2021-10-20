@@ -248,10 +248,16 @@ accel = accel %>%
                            "Sunday" = "weekend"),
          day = forcats::fct_relevel(day, c("Monday", "Tuesday", "Wednesday",
                                            "Thursday", "Friday", "Saturday",
-                                           "Sunday"))) %>% 
-  relocate(week, day, day_type, day_id)
+                                           "Sunday")),
+         day_num = as.numeric(day)) %>% 
+  arrange(week, day_num) %>% 
+  relocate(week, day, day_type, day_num, day_id)
   
 ```
 
 The modified data has totally `r nrow(accel)` observations of `r ncol(accel)` variables. The "week" indicates the number of weeks; the "day" represents the day of each week; the "day_type" represents whether the day is weekday or weekend; the "day_id" represents different number of days; and the activity_* are the activity counts for each minute of a 24-hour day starting at midnight, and there are 1440 of them since there are 1440 minutes each day.
+
+## Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
+
+
 
