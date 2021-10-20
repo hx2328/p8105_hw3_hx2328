@@ -259,5 +259,13 @@ The modified data has totally `r nrow(accel)` observations of `r ncol(accel)` va
 
 ## Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 
+```{r}
+accel %>% 
+  mutate(total_activity = rowSums(accel[ ,c(-1,-2,-3,-4,-5)])) %>% 
+  select(week, day, total_activity) %>% 
+  knitr::kable()
+```
+
+According to the table, there is an increasing trend of total activity within several days, and then dropped, and increase again periodically.
 
 
