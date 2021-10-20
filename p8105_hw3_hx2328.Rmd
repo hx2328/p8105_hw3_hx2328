@@ -82,4 +82,19 @@ aisle_count_plot =
 aisle_count_plot
 ```
 
+## Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.
+
+```{r}
+selected_aisle_table = 
+  instacart %>% 
+  filter(aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) %>% 
+  group_by(aisle, product_name) %>% 
+    summarise(n_obs = n()) %>% 
+  mutate(product_ranking = min_rank(desc(n_obs))) %>% 
+  filter(product_ranking %in% c(1, 2, 3)) %>% 
+  arrange(desc(n_obs)) %>% 
+  knitr::kable()
+
+selected_aisle_table
+```
 
